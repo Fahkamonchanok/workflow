@@ -1,0 +1,95 @@
+.left {
+    padding: 40px;
+    float: left;
+    width: 50%; /* The width is 20%, by default */
+  }
+
+.right {
+    padding: 40px;
+    float: left;
+    width: 50%; /* The width is 20%, by default */
+  }
+
+
+          
+h1 {
+            color: rgb(0, 0, 0);
+            font-family: Georgia, serif;
+            font-weight: bold;
+}
+h4 {
+            color: white;
+            font-family: Georgia, serif;
+}
+text-admin {
+  color: white;
+  font-family: Georgia, serif;
+  font-weight: bold;
+}
+card-body{
+            background-color: white;
+}      
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	max-width: 0 auto;
+	margin: 0 auto;
+}
+
+.main-menu {
+  background:#212121;
+  border-right:1px solid #e5e5e5;
+  position:absolute;
+  top:0;
+  bottom:0;
+  height:100%;
+  left:0;
+  width:60px;
+  overflow:hidden;
+  -webkit-transition:width .05s linear;
+  transition:width .05s linear;
+  z-index:1000;
+  }
+
+.user .user-image{
+    border-radius: 50px;
+    width: 57px;
+    height: 57px;
+    object-fit: cover;
+}
+.user .user-details{
+    margin-left: 5px;
+}
+.user .user-name{
+    margin: 0;
+	color: white;
+}
+       
+.container-admin {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+  background: #004d6e;
+}
+  
+.card-admin {
+width: 750px;
+background: rgb(187, 226, 239);
+border-radius: 10px;
+overflow: hidden;
+display: flex;
+flex-wrap: wrap;
+padding: 60px 100px 33px 160px;
+}
