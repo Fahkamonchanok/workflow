@@ -1,75 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<title>Login V1</title>
-	<meta charset="UTF-8">
+  <title>Login V1</title>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="css/util.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
-	
-<!--===============================================================================================-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/util.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+
+  <!--===============================================================================================-->
 </head>
+
 <body>
-	<div class="limiter">
-		<div class="container-login100">
-			    <div class="wrap-login100">
-				<div class="login100-pic js-tilt" data-tilt>
-					<img src="images/computer.jpg "  width="100%" height="my-auto" alt="IMG">
-				</div>
-				<form class="login100-form validate-form" action="">
-					<span class="login100-form-title">
-						Workflow Setup
-					</span>
-                    <span class="login100-form-title2">
-						Login to continue
-					</span>
-					<div class="wrap-input100 validate-input" >
-						<input name="username"class="input100" type="text"  placeholder="username@gmail.com">
-						<span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
-						</span>
-					</div>
 
-					<div class="wrap-input100 validate-input" >
-						<input type="password"  class="input100" name="password" placeholder="Enter Password" id="password" >
-						<span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
-						
-					</div>
-					<div class="pwcheck"><input type="checkbox" onclick="togglePassword()">  show password</div>
 
-					<div class="container-login100-form-btn">
-						<button type="submit" class="login100-form-btn" onclick="login()" >
-							Login
-						</button>
-					</div>
-
-					<div class="text-center p-t-12">
-						<span class="txt1">
-							Forgot
-						</span>
-						<a class="txt2" href="/repsw">
-							Username / Password?
-						</a>
-					</div>
-
-					<div class="text-center p-t-20">
-						<a class="txt2" href="register.php">
-							Create your Account
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-
-	<!-- <div class="content">
-    <h1 class="text-center mt-3">เข้าสู่ระบบ</h1>
-    <div style="width: 700px;" class="mx-auto">
-      <div class="row mt-3">
+      
+  <div class="limiter">
+    <div class="container-login100">
+      <div class="wrap-login100">
+        <div class="login100-pic js-tilt" data-tilt>
+          <img src="images/computer.jpg " width="100%" height="my-auto" alt="IMG">
+        </div>
+        <div class="row mt-3">
         <div class="col-lg-3 my-auto">
           <label for="username" class="my-auto">ชื่อผู้ใช้ : </label>
         </div>
@@ -88,26 +41,27 @@
       <div class="mt-3 text-center">
         <button type="button" class="btn btn-primary" onclick="logIn()">เข้าสู่ระบบ</button>
       </div>
-      <p class="mt-3 text-center"> คุณยังไม่มีบัญชีใช่ไหม? <a href="register.php" class="rem-ul"> สมัครสมาชิก </a> </p>
+      </div>
     </div>
-  </div> -->
+  </div>
 
-	
-	
-	
 
-	
-<!--===============================================================================================-->	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/tilt/tilt.jquery.min.js"></script>
-	<script>
-	var id = "0";
+
+
+
+
+  <!--===============================================================================================-->
+  <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+  <!--===============================================================================================-->
+  <script src="vendor/bootstrap/js/popper.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <!--===============================================================================================-->
+  <script src="vendor/select2/select2.min.js"></script>
+  <!--===============================================================================================-->
+  <script src="vendor/tilt/tilt.jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    var id = "0";
     var idLogin = "";
 
     $(document).ready(function() {
@@ -152,7 +106,7 @@
           var dataResult = JSON.parse(dataResult);
           if (dataResult.statusCode == 200) {
             localStorage.setItem("token", dataResult.token);
-            window.location.href = "home.php";
+            window.location.href = "index.php";
           } else if (dataResult.statusCode == 201) {
             alert("มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!");
           }
@@ -160,7 +114,7 @@
       });
     }
 
-    function logout(){
+    function logout() {
       $.ajax({
         url: "./connect/logoutUser.php",
         type: "POST",
@@ -178,21 +132,22 @@
           }
         }
       });
-    }	
-		function togglePassword() {
-			var password = document.getElementById("password");
-			( password.type === "password" ) ? password.type = "text": password.type = "password";
-		}
+    }
 
-		
-		$('.js-tilt').tilt({
-			scale: 1.1
-		})
-		
-	</script>
+    function togglePassword() {
+      var password = document.getElementById("password");
+      (password.type === "password") ? password.type = "text": password.type = "password";
+    }
 
-<!--===============================================================================================-->
-	<script src="js/main.js"></script>
+
+    $('.js-tilt').tilt({
+      scale: 1.1
+    })
+  </script>
+
+  <!--===============================================================================================-->
+  <script src="js/main.js"></script>
 
 </body>
+
 </html>

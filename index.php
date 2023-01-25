@@ -145,7 +145,6 @@
       
       
       <div class="w3-bar-item w3-button w3-xlarge mt-3"> : Role Symbol</div>
-      <!-- <b>: Activity Symbol</b> -->
         <div class="mt-3">
           <div class="btn btn-lg " onclick="document.getElementById('id03').style.display='block'">
             <img src="images/staff.png" width="70" height="70"></a>
