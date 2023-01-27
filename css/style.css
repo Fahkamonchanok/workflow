@@ -1,3 +1,4 @@
+
 .left {
     padding: 40px;
     float: left;
@@ -69,27 +70,4 @@ card-body{
 	color: white;
 }
        
-.container-admin {
-  width: 100%;
-  min-height: 100vh;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  padding-top: 5px;
-  background: #004d6e;
-}
-  
-.card-admin {
-width: 750px;
-background: rgb(187, 226, 239);
-border-radius: 10px;
-overflow: hidden;
-display: flex;
-flex-wrap: wrap;
-padding: 60px 100px 33px 160px;
-}
+

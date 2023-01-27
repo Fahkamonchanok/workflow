@@ -41,6 +41,21 @@
       <div class="mt-3 text-center">
         <button type="button" class="btn btn-primary" onclick="logIn()">เข้าสู่ระบบ</button>
       </div>
+      <div class="text-center p-t-12">
+						<span class="txt1">
+							Forgot
+						</span>
+						<a class="txt2" href="repsw.php">
+							Username / Password?
+						</a>
+					</div>
+
+					<div class="text-center p-t-100">
+						<a class="txt2" href="register.php">
+							Create your Account
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div>
       </div>
     </div>
   </div>

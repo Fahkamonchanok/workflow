@@ -1,3 +1,17 @@
+<?php
+//เรียกใช้งานไฟล์เชื่อมต่อฐานข้อมูล
+require_once './connect/connect.php';
+
+//query
+$sql = "SELECT * FROM `wow`";
+$query = mysqli_query($conn, $sql);
+
+$sql = "SELECT * FROM workflow";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_array($result);
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,12 +29,6 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
-
-  <link rel="stylesheet" href="css/adminlte.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="js/adminlte.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
@@ -145,6 +153,7 @@
       
       
       <div class="w3-bar-item w3-button w3-xlarge mt-3"> : Role Symbol</div>
+
         <div class="mt-3">
           <div class="btn btn-lg " onclick="document.getElementById('id03').style.display='block'">
             <img src="images/staff.png" width="70" height="70"></a>
@@ -175,13 +184,14 @@
     <div class="w3-teal w3-xlarge">
       <button id="openNav" class="w3-button w3-teal w3-xlarge" onclick="w3_open()">&#9776;</button>
       <span class="w3-large">Workflow Setup</span>
+      
 
       <div class="w3-right mt-1">
         <button type="button" class="navbar-toggler border-0 px-2">
-        <i class="fas fa-user cus-icon py-1 "></i>
+        <i class="fas fa-user cus-icon py-1 ">  <span id="userShow"></span> </i>
       </button>
       <button type="button" class="navbar-toggler border-0 " >
-        <a href="/logout" style="color: white;"><i class="fas fa-sign-out-alt cus-icon py-1 " ></i>ออกจากระบบ</a>
+        <a onclick="logout()" style="cursor: pointer;"><i class="fas fa-sign-out-alt cus-icon py-1 "></i>ออกจากระบบ</a>
       </button>
       </div>
       
@@ -189,7 +199,6 @@
     </div>
       <div class="w3-container">
         
-        <h4>hello, </h4>
         <ul class="w3-ul w3-card-4 mt-3">
           <li class="w3-bar">
 
@@ -205,24 +214,21 @@
               onclick="document.getElementById('id05').style.display='block'">detail</span>
             
             <div class="w3-bar-item">
-              <span>Workflow Code :<%=user.fistname%></span><br>
+              <span>Workflow Code :</span><br>
               <span>Workflow Group (WOW) : </span>
             </div>
           </li>
   
-  
+
         </ul>
         <div id="diagram"></div>
-         
-        <!-- <div class="btn btn-lg iBannerFix" data-toggle="modal" data-target="#myModal">
-                  <a href="javascript:register('show');"><img src="images/plus.png" width="80" height="80"></a>
-              </div> -->
-              
+
             </div>
-            
+            <button class="btn btn-primary" style="margin-left: auto;" onclick="addWorkflow()"><i class="fa fa-plus" style="margin-right: 10px;"></i> Add</button>
   </div>
   
-  <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-circle iBannerFix"><img src="images/plus.png" width="80" height="80"></button>
+  
+  <button onclick="addworkflow()".style.display='block'" class="w3-button w3-circle iBannerFix"><img src="images/plus.png" width="80" height="80"></button>
   
       
       
@@ -474,6 +480,47 @@
     </div>
   </div>
 
+  <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="Edit-title" id="exampleModalLongTitle">+ Add New Workflow</h5>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label>Workflow Code</label>
+            <input type="text" required class="form-control" id="wf_code">
+          </div>
+          <div class="mt-3">
+            <label>Workflow Group (WOW) </label>
+            <select name="wow" id="wow" class="form-select" >
+                                <option value="" selected disabled>ระบุประเภทของงาน</option>
+                                <?php foreach ($query as $value) { ?>
+                                    <option value="<?= $value['id'] ?>"><?= $value['wow_name'] ?></option>
+                                <?php } ?>
+            </select>
+          </div>
+          <div class="mt-3">
+            <label>Description</label>
+            <textarea required class="summernote form-control" name="wf_description"></textarea>
+          </div>
+          <div class="mt-3">
+            <label>Effective Date</label>
+            <input type="date" name="wf_effective" class="form-control" min="<?php echo date('Y-m-d'); ?>" id="wf_effective" placeholder="ระบุวันที่มีผล dd/mm/yyyy" >
+          </div>
+          <div class="mt-3">
+            <label>End Date</label>
+            <input type="date" name="wf_end" class="form-control" min="<?php echo date('Y-m-d'); ?>" id="wf_end" placeholder="ระบุวันที่มิสิ้นสุด dd/mm/yy" >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" onclick="saveAddWorkflow()">บันทึก</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <script>
     function w3_open() {
@@ -495,6 +542,120 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script src="https://kendo.cdn.telerik.com/2022.3.1109/js/kendo.all.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    var id = "0";
+    var idLogin = "";
+
+    $(document).ready(function() {
+      getProfile();
+    });
+
+    function addWorkflow() {
+      $("#modalForm").modal("show");
+    }
+
+    function closeModal() {
+      $("#wf_code").val("");
+      $("#modalForm").modal("hide");
+    }
+
+    function getProfile() {
+      $.ajax({
+        url: "./connect/getProfileUser.php",
+        type: "POST",
+        data: {
+          token: localStorage.getItem("token"),
+        },
+        cache: false,
+        success: function(dataResult) {
+          var dataResult = JSON.parse(dataResult);
+          if (dataResult.statusCode == 200) {
+            idLogin = dataResult.data[0].User_ID;
+            $("#userShow").text(dataResult.data[0].username);
+            document.getElementById("logout").style.display = "block";
+            document.getElementById("login").style.display = "none";
+          } else if (dataResult.statusCode == 201) {
+            document.getElementById("login").style.display = "block";
+            document.getElementById("logout").style.display = "none";
+            // alert("กรุณาเข้าสู่ระบบใหม่อีกครั้ง!");
+            // window.location.href = "../admin/login.php";
+          }
+        }
+      });
+    }
+
+    function logIn() {
+      $.ajax({
+        url: "./connect/loginUser.php",
+        type: "POST",
+        data: {
+          username: $("#username").val(),
+          password: $("#password").val(),
+        },
+        cache: false,
+        success: function(dataResult) {
+          var dataResult = JSON.parse(dataResult);
+          if (dataResult.statusCode == 200) {
+            localStorage.setItem("token", dataResult.token);
+            window.location.href = "index.php";
+          } else if (dataResult.statusCode == 201) {
+            alert("มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!");
+          }
+        }
+      });
+    }
+   
+    function saveAddWorkflow() {
+      $.ajax({
+        url: "./connect/addWorkflow.php",
+        type: "POST",
+        data: {
+          wf_code: $("#wf_code").val(),
+          wow_name: $("#wow_name").val(),
+          wf_description: $("#wf_description").val(),
+          wf_effective: $("#wf_effective").val(),
+          wf_end: $("#wf_end").val(),
+          createBy: idLogin
+        },
+        cache: false,
+        success: function(dataResult) {
+          var dataResult = JSON.parse(dataResult);
+          if (dataResult.statusCode == 200) {
+            alert('เพิ่มข้อมูล Workflow สำเร็จ')
+            location.reload();
+          } else if (dataResult.statusCode == 201) {
+            alert("มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!");
+          } else if (dataResult.statusCode == 202) {
+            alert("มีข้อผิดพลาด กรุณากรอกข้อมูลให้ครบถ้วน!");
+          }
+        }
+      });
+    }
+    
+
+    function logout() {
+      $.ajax({
+        url: "./connect/logoutUser.php",
+        type: "POST",
+        data: {
+          idLogin: idLogin,
+        },
+        cache: false,
+        success: function(dataResult) {
+          var dataResult = JSON.parse(dataResult);
+          if (dataResult.statusCode == 200) {
+            window.localStorage.removeItem('token');
+            window.location.href = "login.php";
+          } else if (dataResult.statusCode == 201) {
+            alert("มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!");
+          }
+        }
+      });
+    }
+  </script>
   <script type="text/javascript">
     var idFlow = "";
     $(document).ready(function() {
@@ -536,24 +697,7 @@
     }
 
   </script>
-  <!-- <script>
-    const custom = [{"type":"decision","width":140,"height":90,"text":"EXP#1","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":320,"y":120,"fixed":false,"editable":true,"id":"u1672737726566","strokeType":"line"},
-{"type":"circle","width":90,"height":90,"text":"PM Team(2)","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":530,"y":120,"fixed":false,"editable":true,"id":"u1672737728101","strokeType":"line"},
-{"id":"u1672737728958","type":"line","points":[{"x":460,"y":165},{"x":530,"y":165}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":70,"height":0,"x":460,"y":165,"customGap":0,"from":"u1672737726566","to":"u1672737728101","fromSide":"right","toSide":"left","forwardArrow":"filled"},
-{"type":"start","width":127,"height":43,"text":"Start","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":330,"y":-90,"fixed":false,"editable":true,"id":"u1672737729882","strokeType":"line"},
-{"type":"circle","width":101,"height":98,"text":"FS-STAFF","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":340,"y":-10,"fixed":false,"editable":true,"id":"u1672737735436","strokeType":"line"},
-{"type":"circle","width":90,"height":90,"text":"SUPERVISOR","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":190,"y":120,"fixed":false,"editable":true,"id":"u1672737736003","strokeType":"line"},
-{"id":"u1672737738365","type":"line","points":[{"x":320,"y":165},{"x":280,"y":165}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":40,"height":0,"x":320,"y":165,"customGap":0,"from":"u1672737726566","to":"u1672737736003","fromSide":"left","toSide":"right","forwardArrow":"filled"},
-{"type":"circle","width":90,"height":90,"text":"HR Team(1)","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":30,"y":120,"fixed":false,"editable":true,"id":"u1672737739077","strokeType":"line"},
-{"type":"end","width":109,"height":47,"text":"End","extraLinesStroke":"#B8C6D6","strokeWidth":1,"fontSize":14,"lineHeight":14,"strokeDash":"0","fill":"#EEF1F6","stroke":"#B8C6D6","textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontColor":"#4C4C4C","x":20,"y":230,"fixed":false,"editable":true,"id":"u1672737739732","strokeType":"line"},
-{"id":"u1672737740589","type":"line","points":[{"x":190,"y":165},{"x":120,"y":165}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":70,"height":0,"x":190,"y":165,"customGap":0,"from":"u1672737736003","to":"u1672737739077","fromSide":"left","toSide":"right","forwardArrow":"filled"},
-{"id":"u1672737741658","type":"line","points":[{"x":390.5,"y":88},{"x":390.5,"y":98},{"x":390.5,"y":110},{"x":390,"y":110},{"x":390,"y":120}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":0.5,"height":32,"x":390.5,"y":88,"customGap":0,"from":"u1672737735436","to":"u1672737726566","fromSide":"bottom","toSide":"top","forwardArrow":"filled"},
-{"id":"u1672737742582","type":"line","points":[{"x":393.5,"y":-47},{"x":393.5,"y":-37},{"x":393.5,"y":-20},{"x":390.5,"y":-20},{"x":390.5,"y":-10}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":3,"height":37,"x":393.5,"y":-47,"from":"u1672737729882","to":"u1672737735436","fromSide":"bottom","toSide":"top","forwardArrow":"filled"},
-{"id":"u1672737743872","type":"line","points":[{"x":75,"y":210},{"x":75,"y":220},{"x":74.5,"y":220},{"x":74.5,"y":230}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":0.5,"height":20,"x":75,"y":210,"from":"u1672737739077","to":"u1672737739732","fromSide":"bottom","toSide":"top","forwardArrow":"filled"},
-{"id":"u1672737744707","type":"line","points":[{"x":575,"y":210},{"x":575,"y":220},{"x":575,"y":252},{"x":235,"y":252},{"x":235,"y":210}],"stroke":"#2196F3","connectType":"elbow","strokeWidth":2,"cornersRadius":0,"title":{"fontSize":14,"lineHeight":14,"textAlign":"center","textVerticalAlign":"center","fontStyle":"normal","fontWeight":"normal","fontColor":"#4C4C4C","fill":"#FFF","draggable":true,"editable":true,"hidden":false},"width":340,"height":0,"x":575,"y":210,"customGap":42,"from":"u1672737728101","to":"u1672737736003","fromSide":"bottom","toSide":"bottom","forwardArrow":"filled"},
-{"type":"text","width":51,"height":50,"text":"N","lineHeight":14,"fontSize":14,"fontColor":"rgba(0,0,0,0.70)","textAlign":"center","fontStyle":"normal","textVerticalAlign":"center","x":270,"y":120,"fixed":false,"editable":true,"id":"u1672737747865"},{"type":"text","width":90,"height":30,"text":"Y","lineHeight":14,"fontSize":14,"fontColor":"rgba(0,0,0,0.70)","textAlign":"center","fontStyle":"normal","textVerticalAlign":"center","x":450,"y":130,"fixed":false,"editable":true,"id":"u1672737750636"},
-{"type":"text","width":4,"height":2,"text":"","lineHeight":14,"fontSize":14,"fontColor":"rgba(0,0,0,0.70)","textAlign":"center","fontStyle":"normal","textVerticalAlign":"center","x":460,"y":120,"fixed":false,"editable":true,"id":"u1672737753595"}]
-  </script> -->
+  
   <script>
     $('document').ready(function () {
 
